@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { Box } from '@mui/material';
-import styles from './3dflash.module.css';
+import { Box, Typography } from '@mui/material';
+import styles from './3Dcard.module.css';
 
-const ThreeDFlashcard = () => {
+const ThreeDCard = () => {
     const [rotation, setRotation] = useState({ x: 0, y: 0 });
     const cardRef = useRef(null);
 
@@ -38,11 +38,12 @@ const ThreeDFlashcard = () => {
                 }}
             >
                 <Box className={styles.cardFront}>
-                    Welcome to Flashie
+                    <Typography className={styles.title}>Flashie.ai</Typography>
+                    <Typography className={styles.description}>Una mejor forma de estudiar</Typography>
                 </Box>
             </Box>
         </Box>
     );
 };
 
-export default ThreeDFlashcard;
+export default ThreeDCard;

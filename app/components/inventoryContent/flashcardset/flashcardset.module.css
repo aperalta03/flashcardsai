@@ -1,0 +1,42 @@
+/* Flashcard Set */
+.flashcardSet {
+    margin-bottom: 20px;
+    position: relative; /* Added for fade effect */
+}
+.flashcardsContainer {
+    margin-top: 20px;
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    position: relative; /* Added for fade effect */
+}
+.flashcardsContainer::before,
+.flashcardsContainer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    pointer-events: none;
+    z-index: 1;
+}
+.flashcardsContainer::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(142, 68, 173, 0.9) 0%, rgba(142, 68, 173, 0) 100%);
+}
+.flashcardsContainer::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(192, 57, 43, 0.9) 0%, rgba(192, 57, 43, 0) 100%);
+}
+.flashcardsContainer::-webkit-scrollbar {
+    display: none;
+}
+.categoryTitle {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-family: var(--font-family);
+    font-style: italic;
+}
