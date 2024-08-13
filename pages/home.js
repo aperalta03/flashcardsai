@@ -1,10 +1,21 @@
-import React from 'react';
-import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
 import { Box, Button, Typography } from '@mui/material';
 import styles from './home.module.css';
 import ThreeDFlash from './3dflash.js';
 
 export default function Home() {
+    const router = useRouter();
+    const { isSignedIn } = useUser();
+
+    useEffect(() => {
+        if (isSignedIn) {
+            // Navigate to Flashcards page after sign in pe balon
+            router.push('/flashcards');
+        }
+    }, [isSignedIn, router]);
+
     return (
         <Box className={styles.mainContainer}>
             {/* App Bar */}
