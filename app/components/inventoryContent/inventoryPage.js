@@ -1,32 +1,58 @@
 import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
-import { useUser } from "@clerk/nextjs";
+import { onAuthStateChanged } from "firebase/auth";
 import AddBar from "./addbar/addbar";
 import AddPop from "./addbar/addpop/addpop";
 import FlashcardSet from "./flashcardset/flashcardset";
-import { db } from "../../../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth, db } from "../../../firebase";
 import styles from "./inventoryPage.module.css";
+import SubscriptionModal from './submodal/submodal';
 
 export default function InventoryPages() {
-  const { user } = useUser();
+  const [user, setUser] = useState(null);
   const [showInput, setShowInput] = useState(false);
   const [category, setCategory] = useState("");
   const [topic, setTopic] = useState("");
   const [flashcards, setFlashcards] = useState([]);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [subscriptionModalOpen, setSubscriptionModalOpen] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      fetchFlashcards();
-    }
-  }, [user]);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        console.log("User detected in useEffect:", currentUser);
+        checkSubscriptionStatus(currentUser); // Check if user is subscribed
+        fetchFlashcards(currentUser);
+      }
+    });
 
-  const fetchFlashcards = async () => {
-    if (!user) return;
+    return () => unsubscribe();
+  }, []);
+
+  const checkSubscriptionStatus = async (currentUser) => {
     try {
-      const flashcardsRef = doc(db, "flashcards", `user_${user.id}`);
+      // Replace with actual logic to check subscription status from Firestore or another service
+      const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+      if (userDoc.exists() && userDoc.data().isSubscribed) {
+        setIsSubscribed(true);
+      } else {
+        setIsSubscribed(false);
+        setSubscriptionModalOpen(true);
+      }
+    } catch (error) {
+      console.error("Error checking subscription status:", error);
+    }
+  };
+
+  const fetchFlashcards = async (currentUser) => {
+    if (!currentUser) return;
+    try {
+      const flashcardsRef = doc(db, "flashcards", currentUser.uid);
       const flashcardsSnap = await getDoc(flashcardsRef);
       if (flashcardsSnap.exists()) {
+        console.log("Flashcards found:", flashcardsSnap.data());
         const categories = flashcardsSnap.data().categories || [];
         const initializedCategories = categories.map(category => ({
           ...category,
@@ -34,6 +60,7 @@ export default function InventoryPages() {
         }));
         setFlashcards(initializedCategories);
       } else {
+        console.log("No flashcards found for this user.");
         setFlashcards([]);
       }
     } catch (error) {
@@ -74,7 +101,7 @@ export default function InventoryPages() {
         flipped: false
       }));
 
-      const flashcardsRef = doc(db, "flashcards", `user_${user.id}`);
+      const flashcardsRef = doc(db, "flashcards", user.uid);
       const flashcardsSnap = await getDoc(flashcardsRef);
 
       let categories = [];
@@ -109,7 +136,7 @@ export default function InventoryPages() {
   };
 
   return (
-    <Box className={styles.mainContainer}>
+    <Box className={isSubscribed ? styles.mainContainer : `${styles.mainContainer} ${styles.blurred}`}>
       <AddBar onAddClick={handleAddClick} />
       <AddPop
         open={showInput}
@@ -125,9 +152,12 @@ export default function InventoryPages() {
           key={categoryIndex}
           category={categoryObj.categoryName}
           cards={categoryObj.flashcards}
-          onFlip={(index) => handleCardFlip(categoryIndex, index)}
         />
       ))}
+      <SubscriptionModal 
+        open={subscriptionModalOpen} 
+        onClose={() => setSubscriptionModalOpen(false)} 
+      />
     </Box>
   );
 }

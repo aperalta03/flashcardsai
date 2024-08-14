@@ -14,7 +14,7 @@ const ThreeDCard = () => {
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
         
-        const rotateX = (y - centerY) / centerY * 10; // Rotation strength
+        const rotateX = (y - centerY) / centerY * 10;
         const rotateY = (centerX - x) / centerX * 10;
 
         setRotation({ x: rotateX, y: rotateY });

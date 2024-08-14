@@ -1,0 +1,58 @@
+.modalContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    outline: none;
+}
+
+.modalTitle {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+}
+
+.planButton {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 10px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: none;
+    font-weight: 600;
+}
+
+.planButton.active {
+    background-color: #6200EA;
+    color: white;
+}
+
+.paymentButton {
+    margin-top: 20px;
+    width: 100%;
+    background-color: #6200EA;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    text-transform: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.paymentButton:disabled {
+    background-color: #bbb;
+    cursor: not-allowed;
+}

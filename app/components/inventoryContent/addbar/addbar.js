@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./addbar.module.css";
 import { Box, Typography, Button } from "@mui/material";
-import { UserButton } from "@clerk/nextjs";
+import UserButton from './userbtn/userbtn'; // Import the UserButton component
 
 export default function AddBar({ onAddClick }) {
   return (
@@ -10,7 +10,7 @@ export default function AddBar({ onAddClick }) {
         ADD
       </Button>
       <Typography className={styles.title}>Flashcards</Typography>
-      <UserButton className={styles.userButton} />
+      <UserButton />
     </Box>
   );
 }
