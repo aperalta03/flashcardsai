@@ -25,10 +25,36 @@ export default function UserButton() {
     setOpenDialog(true);
   };
 
-  const handleConfirmCancel = () => {
-    // Implement subscription cancellation logic here
-    setOpenDialog(false);
-    // Optionally redirect or show a success message
+  const handleConfirmCancel = async () => {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            console.error('User is not authenticated');
+            return;
+        }
+
+        const idToken = await user.getIdToken();
+
+        // Make sure the fetch request points to the correct API route
+        const response = await fetch('/api/cancel_subscription', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${idToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            console.error('Error canceling subscription:', response.statusText);
+            return;
+        }
+
+        console.log('Subscription canceled successfully');
+        setOpenDialog(false);
+        window.location.href = '/subscription-canceled';
+    } catch (error) {
+        console.error('Failed to cancel subscription:', error);
+    }
   };
 
   const handleDialogClose = () => {

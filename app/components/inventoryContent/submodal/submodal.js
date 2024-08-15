@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, Modal } from '@mui/material';
 import styles from './submodal.module.css';
-import StripeButton from './stripeBtn/stripeBtn';
+import StripeBtn from './stripeBtn/stripeBtn';
 
 const SubscriptionModal = ({ open, onClose }) => {
   const [selectedPlan, setSelectedPlan] = useState('');
@@ -10,10 +10,8 @@ const SubscriptionModal = ({ open, onClose }) => {
     setSelectedPlan(plan);
   };
 
-  const handlePayment = async () => {
-    console.log(`Processing payment for the ${selectedPlan} plan.`);
-    onClose(); 
-  };
+  const priceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_ID; 
+  const applyTrial = selectedPlan === 'trial'; 
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -26,16 +24,17 @@ const SubscriptionModal = ({ open, onClose }) => {
           className={`${styles.planButton} ${selectedPlan === 'pro' ? styles.active : ''}`}
           onClick={() => handlePlanSelect('pro')}
         >
-          Pro Plan - $10/month
+          Paid Plan - $5/month
         </Button>
         <Button
           className={`${styles.planButton} ${selectedPlan === 'trial' ? styles.active : ''}`}
           onClick={() => handlePlanSelect('trial')}
         >
-          1-Day Free Trial
+          2-Day Free Trial
         </Button>
-        <StripeButton />
-        
+
+        {/* Pass the selected plan and applyTrial flag to StripeBtn */}
+        <StripeBtn priceId={priceId} applyTrial={applyTrial} />
       </Box>
     </Modal>
   );

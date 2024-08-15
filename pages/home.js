@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'; 
-import { auth, googleProvider } from '../firebase'; // Ensure this path is correct based on your project structure
+import { auth } from '../firebase'; // Ensure this path is correct based on your project structure
 import HomePage from '../app/components/homeContent/homePage';
 import { Container } from '@mui/material';
 
