@@ -152,6 +152,7 @@ export default function InventoryPages() {
           key={categoryIndex}
           category={categoryObj.categoryName}
           cards={categoryObj.flashcards}
+          onFlip={(cardIndex) => handleCardFlip(categoryIndex, cardIndex)} // Pass handleCardFlip here
         />
       ))}
       <SubscriptionModal 

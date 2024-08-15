@@ -4,8 +4,7 @@ import { auth } from '../../../../../firebase';  // Adjust this import path acco
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import styles from './authmodal.module.css';
 import Image from 'next/image';
-import googleIcon from '../../../../assets/googleicon.png';  // Ensure this path is correct
-import GooglePayButton from '@/app/api/googlepay/googlePayButton'; // Ensure this path is correct
+import googleIcon from '../../../../assets/googleIcon.png'; 
 
 const AuthModal = ({ open, onClose, isLogin }) => {
   const [email, setEmail] = useState('');

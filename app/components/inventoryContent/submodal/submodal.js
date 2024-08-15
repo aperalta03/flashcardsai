@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, Modal } from '@mui/material';
 import styles from './submodal.module.css';
-import GooglePayButton from '@/app/api/googlepay/googlePayButton'; // Ensure path is correct
-import StripeButton from '../../../api/checkout_sessions/stripeBtn';
-import CheckoutButton from '../../../api/checkout_sessions/checkoutButton';
+import StripeButton from './stripeBtn/stripeBtn';
 
 const SubscriptionModal = ({ open, onClose }) => {
   const [selectedPlan, setSelectedPlan] = useState('');
@@ -23,12 +21,7 @@ const SubscriptionModal = ({ open, onClose }) => {
         <Typography variant="h6" className={styles.modalTitle}>
           Choose Your Plan
         </Typography>
-        <Button
-          className={`${styles.planButton} ${selectedPlan === 'basic' ? styles.active : ''}`}
-          onClick={() => handlePlanSelect('basic')}
-        >
-          Basic Plan - $5/month
-        </Button>
+      
         <Button
           className={`${styles.planButton} ${selectedPlan === 'pro' ? styles.active : ''}`}
           onClick={() => handlePlanSelect('pro')}
@@ -41,16 +34,8 @@ const SubscriptionModal = ({ open, onClose }) => {
         >
           1-Day Free Trial
         </Button>
-        {/* <GooglePayButton /> */}
-        < StripeButton />
-        <CheckoutButton />
-        <Button
-          className={styles.paymentButton}
-          onClick={handlePayment}
-          disabled={!selectedPlan}
-        >
-          Confirm Payment
-        </Button>
+        <StripeButton />
+        
       </Box>
     </Modal>
   );
