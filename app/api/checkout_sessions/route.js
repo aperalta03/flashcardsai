@@ -17,7 +17,7 @@ export async function POST(request) {
         const decodedToken = await adminAuth.verifyIdToken(idToken);
         const userId = decodedToken.uid;
 
-        const origin = request.headers.get('origin') || 'https://flashie-dlq35yoq7-aperalta03s-projects.vercel.app';
+        const origin = request.headers.get('origin') || 'https://flashie-chi.vercel.app'; // Replace with your actual Vercel URL
         const requestData = await request.json();
         const { priceId, applyTrial } = requestData || {};  // Expecting applyTrial boolean
 
@@ -26,7 +26,6 @@ export async function POST(request) {
             return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
         }
         
-        //meta data
         const sessionParams = {
             payment_method_types: ['card'],
             mode: 'subscription',
