@@ -17,6 +17,7 @@ const HomePage = () => {
     <Container className={styles.container} maxWidth={false}>
      
         <CircularProgress size={100}/>
+        <p>cagando...</p>
       
     </Container> 
   );

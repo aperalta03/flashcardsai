@@ -25,22 +25,22 @@ export async function POST(request) {
             console.error('User ID is missing or invalid');
             return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
         }
-
+        
+        //meta data
         const sessionParams = {
             payment_method_types: ['card'],
             mode: 'subscription',
             line_items: [
-                {
-                    price: priceId, // Use the passed price ID
-                    quantity: 1,
-                },
+              {
+                price: priceId,
+                quantity: 1,
+              },
             ],
             success_url: `${origin}/flashcards`,
             cancel_url: `${origin}/subscription-failed`,
-            client_reference_id: userId,  // Pass the userId as client_reference_id
+            metadata: { userId: userId }, // Include the user ID in metadata
         };
-        
-        // Conditionally add trial period
+
         if (applyTrial) {
             sessionParams.subscription_data = {
                 trial_period_days: 2,  // Apply the 2-day trial period

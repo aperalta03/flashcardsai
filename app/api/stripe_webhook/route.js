@@ -10,8 +10,9 @@ export async function POST(request) {
     let event;
 
     try {
+        // Parse and verify the Stripe webhook event
         event = stripe.webhooks.constructEvent(
-            await request.text(), // use text() here since it's raw JSON
+            await request.text(), // Use text() here since it's raw JSON
             sig,
             process.env.STRIPE_WEBHOOK_SECRET
         );
@@ -20,23 +21,30 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Webhook error' }, { status: 400 });
     }
 
-    // Handle the event
+    // Handle the event when checkout.session.completed is triggered
     if (event.type === 'checkout.session.completed') {
         const session = event.data.object;
 
-        const subscriptionId = session.subscription;
-        const userId = session.client_reference_id;
+        const subscriptionId = session.subscription; // Subscription ID from the session
+        const userId = session.metadata.userId; // Retrieve the userId from metadata
         
         console.log('Subscription ID at webhook:', subscriptionId);
+        console.log('User ID from metadata:', userId);
 
+        // If both subscriptionId and userId are present, save them in Firestore
         if (subscriptionId && userId) {
-            await adminDb.collection('users').doc(userId).set(
-                { subscriptionId }, 
-                { merge: true }
-            );
-            console.log('Subscription ID stored in Firestore');
+            try {
+                await adminDb.collection('users').doc(userId).set(
+                    { subscriptionId }, 
+                    { merge: true }
+                );
+                console.log('Subscription ID stored in Firestore');
+            } catch (error) {
+                console.error('Error storing Subscription ID in Firestore:', error);
+            }
+        } else {
+            console.error('Subscription ID or User ID is missing.');
         }
-        
     }
 
     return NextResponse.json({ received: true });
