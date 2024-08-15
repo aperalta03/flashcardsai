@@ -4,7 +4,6 @@ import { auth } from '../../../../../firebase';  // Adjust this import path acco
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import styles from './authmodal.module.css';
 import Image from 'next/image';
-import googleIcon from '../../../../assets/googleIcon.png'; 
 
 const AuthModal = ({ open, onClose, isLogin }) => {
   const [email, setEmail] = useState('');
@@ -49,7 +48,7 @@ const AuthModal = ({ open, onClose, isLogin }) => {
           {isLogin ? 'Login' : 'Create your account'}
         </Typography>
         <Button className={styles.providerButton} onClick={handleGoogleAuth}>
-          <Image src={googleIcon} alt="Google" width={20} height={20} className={styles.icon} />
+          <Image src='/googleicon.png' alt="Google" width={20} height={20} className={styles.icon} />
           Sign in with Google
         </Button>
         <div className={styles.divider}>or</div>
