@@ -17,7 +17,7 @@ export async function POST(request) {
         const decodedToken = await adminAuth.verifyIdToken(idToken);
         const userId = decodedToken.uid;
 
-        const origin = request.headers.get('origin') || 'http://localhost:3000';
+        const origin = request.headers.get('origin') || 'https://flashie-dlq35yoq7-aperalta03s-projects.vercel.app';
         const requestData = await request.json();
         const { priceId, applyTrial } = requestData || {};  // Expecting applyTrial boolean
 
