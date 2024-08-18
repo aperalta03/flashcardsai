@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { adminAuth, adminDb } from '../../../config/firebaseadmin';
+import { adminAuth, adminDb } from '../../../config/firebaseadmin'; // Make sure this path is correct
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -17,9 +17,9 @@ export async function POST(request) {
         const decodedToken = await adminAuth.verifyIdToken(idToken);
         const userId = decodedToken.uid;
 
-        const origin = request.headers.get('origin') || 'https://flashie-chi.vercel.app'; // Replace with your actual Vercel URL
+        const origin = request.headers.get('origin') || 'https://flashie-chi.vercel.app' || 'http://localhost:3000';
         const requestData = await request.json();
-        const { priceId, applyTrial } = requestData || {};  // Expecting applyTrial boolean
+        const { priceId, applyTrial } = requestData || {};
 
         if (!userId) {
             console.error('User ID is missing or invalid');
@@ -37,12 +37,12 @@ export async function POST(request) {
             ],
             success_url: `${origin}/flashcards`,
             cancel_url: `${origin}/subscription-failed`,
-            metadata: { userId: userId }, // Include the user ID in metadata
+            metadata: { userId: userId },
         };
 
         if (applyTrial) {
             sessionParams.subscription_data = {
-                trial_period_days: 2,  // Apply the 2-day trial period
+                trial_period_days: 2,
             };
         }
         
